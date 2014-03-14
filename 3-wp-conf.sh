@@ -3,7 +3,7 @@
 ##################
 cp conf/nginx-site.conf /etc/nginx/sites-available/default
 cp conf/supervisord.conf /etc/supervisord.conf
-
+mkdir /etc/nginx/ssl
 
 if [ ! -f /usr/share/nginx/www/wp-config.php ]; then
   #mysql has to be started this way as it doesn't work to call from /etc/init.d
@@ -31,20 +31,25 @@ if [ ! -f /usr/share/nginx/www/wp-config.php ]; then
   /'LOGGED_IN_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/
   /'NONCE_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/" /usr/share/nginx/www/wp-config-sample.php > /usr/share/nginx/www/wp-config.php
 
+chown www-data:www-data /usr/share/nginx/www/wp-config.php
 
-ENDL
+mysqladmin -u root password $MYSQL_PASSWORD 
 
-  chown www-data:www-data /usr/share/nginx/www/wp-config.php
+mysql -uroot -p$MYSQL_PASSWORD -e "CREATE DATABASE wordpress; GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' IDENTIFIED BY '$WORDPRESS_PASSWORD'; FLUSH PRIVILEGES;"
 
-  mysqladmin -u root password $MYSQL_PASSWORD 
-  mysql -uroot -p$MYSQL_PASSWORD -e "CREATE DATABASE wordpress; GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' IDENTIFIED BY '$WORDPRESS_PASSWORD'; FLUSH PRIVILEGES;"
-  killall mysqld
+killall mysqld
 fi
 
 ############
 # SSL Cert
 ############
 openssl req -nodes -newkey rsa:2048 -nodes -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.csr -subj "/C=US/ST=Virginia/L=ALexandria/O=Arcwave/OU=Cloudworks/CN=wp.arcwaveusa.com"
+
+############
+# Composer
+############
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
 
 ############
 # WP Plugins

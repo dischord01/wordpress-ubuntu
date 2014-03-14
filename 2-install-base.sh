@@ -41,7 +41,8 @@ php5-snmp \
 php5-sqlite \
 php5-tidy \
 php5-xmlrpc \
-php5-xsl
+php5-xsl \
+php5-cli
 
 # mysql config
 sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
@@ -58,17 +59,38 @@ sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 100M/g" /etc/php5/fpm/php.in
 sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
 find /etc/php5/cli/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \;
 
-# nginx site conf
-# ADD ./nginx-site.conf /etc/nginx/sites-available/default
 
 # Supervisor Config
 /usr/bin/easy_install supervisor
-# ADD ./supervisord.conf /etc/supervisord.conf
 
 # Install Wordpress
 wget http://wordpress.org/latest.tar.gz 
-mv latest.tar.gz /usr/share/nginx/
+mv latest.tar.gz /usr/share/nginx
 cd /usr/share/nginx/ && tar xvf latest.tar.gz && rm latest.tar.gz
+mv /usr/share/nginx/www/5* /usr/share/nginx/wordpress
+rm -rf /usr/share/nginx/www
 mv /usr/share/nginx/wordpress /usr/share/nginx/www
 chown -R www-data:www-data /usr/share/nginx/www
+
+# Install WP-CLI
+curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-cli.phar
+php wp-cli.phar --info
+chmod +x wp-cli.phar
+mv wp-cli.phar /usr/bin/wp
+echo 'export PATH=/root/.wp-cli/bin:$PATH' >> ~/.bash_profile
+echo 'source $HOME/.wp-cli/vendor/wp-cli/wp-cli/utils/wp-completion.bash' >> ~/.bash_profile
+source ~/.bash_profile
+
+
+
+
+
+
+
+
+
+
+
+
+
 

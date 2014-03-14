@@ -9,40 +9,10 @@ dpkg-divert --local --rename --add /sbin/initctl
 ln -sf /bin/true /sbin/initctl
 
 # Basic Requirements
-apt-get -y install \
-mysql-server \
-mysql-client \
-nginx \
-php5-fpm \
-php5-mysql \
-php-apc \
-pwgen \
-python-setuptools \
-curl \
-git \
-unzip \
-cron-apt
+apt-get -y install mysql-server mysql-client nginx php5-fpm php5-mysql php-apc pwgen python-setuptools curl git unzip cron-apt
 
 # Wordpress Requirements
-apt-get -y install \
-php5-curl \
-php5-gd \
-php5-intl \
-php-pear \
-php5-imagick \
-php5-imap \
-php5-mcrypt \
-php5-memcache \
-php5-ming \
-php5-ps \
-php5-pspell \
-php5-recode \
-php5-snmp \
-php5-sqlite \
-php5-tidy \
-php5-xmlrpc \
-php5-xsl \
-php5-cli
+apt-get -y install php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-cli
 
 # mysql config
 sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
@@ -77,9 +47,6 @@ curl -L https://raw.github.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > wp-cli.
 php wp-cli.phar --info
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/bin/wp
-echo 'export PATH=/root/.wp-cli/bin:$PATH' >> ~/.bash_profile
-echo 'source $HOME/.wp-cli/vendor/wp-cli/wp-cli/utils/wp-completion.bash' >> ~/.bash_profile
-source ~/.bash_profile
 
 
 

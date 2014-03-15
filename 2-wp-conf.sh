@@ -71,3 +71,14 @@ pushd /usr/share/nginx/www/wp-content/plugins
 # start all the services
 /usr/local/bin/supervisord -n
 
+
+echo "\n--------------------------------------------------\n";
+echo " MySQL DataBase:           {$WORDPRESS_DB}\n";
+echo " MySQL Wordpress Password: {$WORDPRESS_PASSWORD}\n";
+echo " MySQL Root Password:      {$MYSQL_PASSWORD}\n";
+echo " WP Email:                 {$WP_EMAIL}\n";
+echo " WP Admin:                 {$WP_BOSS}\n";
+echo " WP Admin Password:        {$WP_ADMIN_PASSWORD}\n";
+
+echo " DB Passwords stored to /mysql-root-pw.txt + /wordpress-db-pw.txt"
+echo "--------------------------------------------------\n";

@@ -1,3 +1,4 @@
+!#/bin/bash
 ##################
 # NGINX CONF
 ##################
@@ -54,10 +55,9 @@ mv composer.phar /usr/local/bin/composer
 ############
 # WP Plugins
 ############
-curl https://raw.github.com/wp-cli/wp-cli.github.com/master/installer.sh | bash
-wp core install --url="$WP_URL"  --title="$WP_BLOG_TITLE" --admin_user="$WP_BOSS" --admin_password="$WP_ADMIN_PASSWORD" --admin_email="$WP_EMAIL"
 pushd /usr/share/nginx/www/wp-content/plugins
-wp plugin install wp-mail-smtp cms-tree-page-view w3-total-cache wordpress-seo white-label-cms google-analyticator disqus-comment-system nginx-helper
+/usr/bin/wp core install --url="$WP_URL"  --title="$WP_BLOG_TITLE" --admin_user="$WP_BOSS" --admin_password="$WP_ADMIN_PASSWORD" --admin_email="$WP_EMAIL"
+/usr/bin/wp plugin install wp-mail-smtp cms-tree-page-view w3-total-cache wordpress-seo white-label-cms google-analyticator disqus-comment-system nginx-helper
 # popd
 
 
